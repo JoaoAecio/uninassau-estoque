@@ -1,25 +1,24 @@
 <h1 align="center"> Sistema de Gestão de Estoque Para Clínicas </h1>
 
-<p align="center">
-<img alt="Static Badge" src="https://img.shields.io/badge/Status-Em_Desenvolvimento-green?style=for-the-badge">
-<img alt="Static Badge" src="https://img.shields.io/badge/Language-Java_Script-orange?style=for-the-badge">
-<img alt="Static Badge" src="https://img.shields.io/badge/Language-Java-orange?style=for-the-badge">
+ <p align="center">
+  <img alt="Status" src="https://img.shields.io/badge/Status-Em_Desenvolvimento-green?style=for-the-badge">
+  <img alt="Frontend" src="https://img.shields.io/badge/Frontend-React.js-blue?style=for-the-badge&logo=react">
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-Ambiente-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
+  <img alt="Backend" src="https://img.shields.io/badge/Backend-Java-red?style=for-the-badge&logo=openjdk&logoColor=white">
+  <img alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-Framework-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+  <img alt="Database" src="https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
 </p>
-<p align="center">
-<img alt="Static Badge" src="https://img.shields.io/badge/Language-HTML-orange?style=for-the-badge">
-<img alt="Static Badge" src="https://img.shields.io/badge/Language-CSS-orange?style=for-the-badge">
-<p>
 
 Este é um projeto para a criação de um **sistema de gestão de estoque** voltado para clínicas-escola da UNINASSAU. O objetivo é garantir um melhor controle de insumos, utilizando boas práticas de desenvolvimento e acessibilidade.
 
 ## 📌 Tecnologias Utilizadas
 
-- **Frontend:** React.js  
+- **Frontend:** React.js + Node.js  
 - **Backend:** Java com Spring Boot  
 - **Banco de Dados:** PostgreSQL  
 - **Gerenciamento de Código:** GitHub  
 - **Gerenciamento de Tarefas:** Trello  
-- **Ferramentas Adicionais:** Docker, Postman  
+- **Ferramentas Adicionais:** VS Code, Docker, Postman.   
 
 ---
 
@@ -37,21 +36,26 @@ Antes de iniciar, instale as seguintes ferramentas:
 
 ---
 
-### 2️⃣ Clonando o Repositório
-Para obter o código-fonte, execute no terminal:
+### 2️⃣ Clonando os Repositórios
+Para obter o código-fonte, execute no terminal do Git:
 
+Frontend:
 ```sh
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/JoaoAecio/uninassau-estoque.git
+cd uninassau-estoque
+```
+Backend:
+```sh
+git clone https://github.com/Lsiin/Backend_Estoque_Clinica.git
+cd Backend_Estoque_Clinica
 ```
 
 ---
 
 ### 3️⃣ Configuração do Frontend (React)
-Se estiver usando React, execute os seguintes comandos:
+Para execução do React, execute os seguintes comandos:
 
 ```sh
-npx create-react-app frontend
 cd frontend
 npm install
 npm start
@@ -62,8 +66,7 @@ Isso iniciará o servidor localmente na URL `http://localhost:3000`.
 ---
 
 ### 4️⃣ Configuração do Backend (Spring Boot)
-1. Acesse [Spring Initializr](https://start.spring.io/) e gere um projeto com as dependências: **Spring Web**, **Spring Data JPA**, **PostgreSQL/MySQL** e **Lombok**.  
-2. Extraia o projeto na pasta `backend` e, no terminal, execute:
+1. O backend do sistema já está pronto e disponível no repositório abaixo:
 
 ```sh
 cd backend
@@ -79,7 +82,7 @@ Se tudo estiver correto, o backend rodará na URL `http://localhost:8080`.
 Caso esteja utilizando **PostgreSQL**, siga as etapas abaixo:
 
 1. Crie um banco de dados chamado `estoque_db`.
-2. Configure as credenciais no arquivo `application.properties` do Spring Boot:
+2. Configure as credenciais no arquivo `application.properties` no Backend:
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/estoque_db
@@ -97,37 +100,23 @@ docker run --name estoque_db -e POSTGRES_USER=usuario -e POSTGRES_PASSWORD=senha
 ---
 
 ### 6️⃣ Configuração do GitHub para Trabalho em Equipe
-Para trabalhar com branches, siga estes passos:
+Para trabalhar acessar a branch principal, siga estes passos:
 
-1. Criar uma branch de desenvolvimento:
+1. Caso não tenha clonado o repositório, volte para a etapa 2:
+
+2. Mude para a branch principal do sistema (deploy):
 ```sh
-git checkout -b desenvolvimento
-git push origin desenvolvimento
+git checkout deploy
 ```
-
-2. Criar uma branch específica para uma nova funcionalidade:
-```sh
-git checkout -b feature-nova-tela
-git push origin feature-nova-tela
-```
-
-3. Enviar alterações para o repositório remoto:
-```sh
-git add .
-git commit -m "Mensagem do commit"
-git push origin feature-nova-tela
-```
-
----
+A branch deploy contém a versão estável mais recente do sistema.
 
 ### 7️⃣ Testando a Integração
-- ✅ Rodar o backend (`Spring Boot`)
-- ✅ Rodar o frontend (`React`)
-- ✅ Acessar a API (`http://localhost:8080`)
+- ✅ Rodar o backend (`Spring Boot`), inicializando o BackendApplication.java
+- ✅ Rodar o frontend (`React`), no diretório /frontend, digite 'npm run dev'
 - ✅ Acessar o frontend (`http://localhost:3000`)
 - ✅ Verificar se o banco de dados foi criado corretamente
 
-Se tudo estiver funcionando, o ambiente está pronto para desenvolvimento! 🚀
+Se tudo estiver funcionando, o ambiente está pronto! 🚀
 
 ---
 
@@ -148,4 +137,11 @@ Usamos o Trello para gerenciar tarefas, com as seguintes listas:
 
 ---
 
-Feito com dedicação pela equipe! 👨‍💻👩‍💻  
+👩‍💻 Equipe 
+
+- Erika Luiza
+- Ícaro Assis
+- Igor Souza
+- João Aécio
+- Marcos Rangel
+- Vitor Antônio
