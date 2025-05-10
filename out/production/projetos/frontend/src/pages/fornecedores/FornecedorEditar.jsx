@@ -96,7 +96,7 @@ const FornecedoresEditar = () => {
         category: { id: formData.categoryId },
       };
 
-      const response = await api.put(`/suppliers/update/${id}`, supplierData, {
+      await api.put(`/suppliers/update/${id}`, supplierData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

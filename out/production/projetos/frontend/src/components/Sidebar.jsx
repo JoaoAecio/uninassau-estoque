@@ -37,26 +37,32 @@ const Sidebar = ({ isCompact }) => {
     setActiveSubmenu(activeSubmenu === menu ? null : menu);
   };
 
-  const menuItems = [
-    {
-      title: "Cadastrar",
-      icon: <FiUsers className="size-5" />,
-      submenu: [
-        { title: "Usuários", icon: <FiUsers className="size-5" />, href: "/user" },
-        { title: "Categoria", icon: <FiFolderPlus className="size-5" />, href: "#" },
-      ],
-    },
-    {
-      title: "Relatórios",
-      icon: <FiFileText className="size-5" />,
-      submenu: [
-        { title: "Estoques", icon: <FiBox className="size-5" />, href: "/relatorioestoque" },
-        { title: "Pedidos", icon: <FiFileText className="size-5" />, href: "/relatoriopedidos" },
-      ],
-    },
-    { title: "Estoque", icon: <FiBox className="size-5" />, href: "/estoqueindex" },
-    { title: "Fornecedores", icon: <FiTruck className="size-5" />, href: "/fornecedores" },
-  ];
+const menuItems = [
+  {
+    title: "Dashboard",
+    icon: <FiBox className="size-5" />,
+    href: "/dashboard",
+  },
+  {
+    title: "Cadastrar",
+    icon: <FiUsers className="size-5" />,
+    submenu: [
+      { title: "Usuários", icon: <FiUsers className="size-5" />, href: "/user" },
+      { title: "Categoria", icon: <FiFolderPlus className="size-5" />, href: "#" },
+    ],
+  },
+  {
+    title: "Relatórios",
+    icon: <FiFileText className="size-5" />,
+    submenu: [
+      { title: "Estoques", icon: <FiBox className="size-5" />, href: "/relatorioestoque" },
+      { title: "Pedidos", icon: <FiFileText className="size-5" />, href: "/relatoriopedidos" },
+    ],
+  },
+  { title: "Estoque", icon: <FiBox className="size-5" />, href: "/estoqueindex" },
+  { title: "Fornecedores", icon: <FiTruck className="size-5" />, href: "/fornecedores" },
+];
+
 
   return (
     <div className={`h-full flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ${isCompact ? "w-16" : "w-64"}`}>
