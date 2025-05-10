@@ -66,7 +66,7 @@ Isso iniciará o servidor localmente na URL `http://localhost:3000`.
 ---
 
 ### 4️⃣ Configuração do Backend (Spring Boot)
-1. O backend do sistema já está pronto e disponível no repositório abaixo:
+Para execução do Springboot, execute os seguintes comandos:
 
 ```sh
 cd backend
@@ -82,19 +82,23 @@ Se tudo estiver correto, o backend rodará na URL `http://localhost:8080`.
 Caso esteja utilizando **PostgreSQL**, siga as etapas abaixo:
 
 1. Crie um banco de dados chamado `estoque_db`.
-2. Configure as credenciais no arquivo `application.properties` no Backend:
+2. Configure as credenciais no arquivo `.env` no Backend:
 
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/estoque_db
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-spring.jpa.hibernate.ddl-auto=update
+```.env
+DB_URL=url_do_banco
+DB_USERNAME=user
+DB_PASSWORD=password
 ```
 
 Se quiser rodar o banco via **Docker**, utilize o seguinte comando:
 
 ```sh
-docker run --name estoque_db -e POSTGRES_USER=usuario -e POSTGRES_PASSWORD=senha -p 5432:5432 -d postgres
+docker run --name estoque_db \
+  -e POSTGRES_USER=clinica_user \
+  -e POSTGRES_PASSWORD=clinica_pass \
+  -e POSTGRES_DB=estoque_db \
+  -p 5432:5432 \
+  -d postgres
 ```
 
 ---
