@@ -37,39 +37,70 @@ const Sidebar = ({ isCompact }) => {
     setActiveSubmenu(activeSubmenu === menu ? null : menu);
   };
 
-const menuItems = [
-  {
-    title: "Dashboard",
-    icon: <FiBox className="size-5" />,
-    href: "/dashboard",
-  },
-  {
-    title: "Cadastrar",
-    icon: <FiUsers className="size-5" />,
-    submenu: [
-      { title: "Usuários", icon: <FiUsers className="size-5" />, href: "/user" },
-      { title: "Categoria", icon: <FiFolderPlus className="size-5" />, href: "#" },
-    ],
-  },
-  {
-    title: "Relatórios",
-    icon: <FiFileText className="size-5" />,
-    submenu: [
-      { title: "Estoques", icon: <FiBox className="size-5" />, href: "/relatorioestoque" },
-      { title: "Pedidos", icon: <FiFileText className="size-5" />, href: "/relatoriopedidos" },
-    ],
-  },
-  { title: "Estoque", icon: <FiBox className="size-5" />, href: "/estoqueindex" },
-  { title: "Fornecedores", icon: <FiTruck className="size-5" />, href: "/fornecedores" },
-];
-
+  const menuItems = [
+    {
+      title: "Dashboard",
+      icon: <FiBox className="size-5" />,
+      href: "/dashboard",
+    },
+    {
+      title: "Cadastrar",
+      icon: <FiUsers className="size-5" />,
+      submenu: [
+        {
+          title: "Usuários",
+          icon: <FiUsers className="size-5" />,
+          href: "/user",
+        },
+        {
+          title: "Categoria",
+          icon: <FiFolderPlus className="size-5" />,
+          href: "#",
+        },
+      ],
+    },
+    {
+      title: "Relatórios",
+      icon: <FiFileText className="size-5" />,
+      submenu: [
+        {
+          title: "Estoques",
+          icon: <FiBox className="size-5" />,
+          href: "/relatorioestoque",
+        },
+        {
+          title: "Pedidos",
+          icon: <FiFileText className="size-5" />,
+          href: "/relatoriopedidos",
+        },
+      ],
+    },
+    {
+      title: "Estoque",
+      icon: <FiBox className="size-5" />,
+      href: "/estoqueindex",
+    },
+    {
+      title: "Fornecedores",
+      icon: <FiTruck className="size-5" />,
+      href: "/fornecedores",
+    },
+  ];
 
   return (
-    <div className={`h-full flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ${isCompact ? "w-16" : "w-64"}`}>
+    <div
+      className={`h-full flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ${
+        isCompact ? "w-16" : "w-64"
+      }`}
+    >
       {/* Logo */}
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">
         {!isCompact ? (
-          <img src="/logo-white.png" alt="Logo" className="h-8 object-contain" />
+          <img
+            src="/logo-white.png"
+            alt="Logo"
+            className="h-8 object-contain"
+          />
         ) : (
           <div className="w-8 h-8 flex items-center justify-center">
             <FiMenu className="text-gray-600 size-6" />
@@ -154,15 +185,25 @@ const menuItems = [
             />
             {!isCompact && (
               <div>
-                <p className="text-sm font-medium truncate">{usuarioLogado.nome}</p>
-                <span className="text-xs text-gray-600">ID: {usuarioLogado.id}</span>
+                <p className="text-sm font-medium truncate">
+                  {usuarioLogado.nome}
+                </p>
+                <span className="text-xs text-gray-600">
+                  ID: {usuarioLogado.id}
+                </span>
               </div>
             )}
           </a>
         </div>
 
         <div className="border-t border-gray-200 p-4">
-          <form action="/login">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              localStorage.removeItem("token");
+              window.location.href = "/login";
+            }}
+          >
             <button
               type="submit"
               className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium ${
