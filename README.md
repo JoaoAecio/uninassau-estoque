@@ -1,4 +1,4 @@
-<h1 align="center"> Sistema de gestão de estoque para clinicas </h1>
+<h1 align="center"> Sistema de Gestão de Estoque Para Clínicas </h1>
 
 <p align="center">
 <img alt="Static Badge" src="https://img.shields.io/badge/Status-Em_Desenvolvimento-green?style=for-the-badge">
