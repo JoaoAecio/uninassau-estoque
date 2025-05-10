@@ -1,6 +1,20 @@
 // src/services/supplierService.js
 import api from "./api";
 
+export async function getAllSuppliers() {
+  try {
+    const response = await api.get("/suppliers", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error in getAllSuppliers:", error);
+    throw error;
+  }
+}
+
 export async function createSupplier(supplierData) {
   try {
     const response = await api.post("/suppliers/register", supplierData, {
