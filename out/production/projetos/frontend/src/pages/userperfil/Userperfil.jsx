@@ -23,7 +23,7 @@ const Userperfil = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:8080/user/me", {
+        const response = await fetch("http://localhost:8080/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -34,8 +34,20 @@ const Userperfil = () => {
         }
 
         const data = await response.json();
-        setUser((prevUser) => ({ ...prevUser, ...data }));
-      } catch {
+
+        console.log("Dados do usuário recebidos:", data); // Verifica se os campos estão vindo corretamente
+
+        // Ajustando os nomes dos campos para corresponder aos do backend
+        setUser({
+          name: data.name || "Não informado",
+          email: data.email || "Não informado",
+          cpf: data.cpf || "Não informado",
+          phoneNumber: data.phone || "Não informado", // Corrigindo para usar "phone"
+          birthday: data.birthDay || "", // Corrigindo para usar "birthDay" e evitar erro no <input type="date">
+          avatarUrl: data.avatarUrl || user.avatarUrl,
+        });
+      } catch (error) {
+        console.error("Erro ao carregar perfil:", error);
         toast.error("Erro ao carregar informações do perfil");
       }
     };
@@ -72,7 +84,8 @@ const Userperfil = () => {
       if (!response.ok) throw new Error("Erro ao atualizar perfil");
 
       toast.success("Perfil atualizado com sucesso!");
-    } catch {
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
       toast.error("Erro ao atualizar perfil");
     }
   };
@@ -147,3 +160,4 @@ const Userperfil = () => {
 };
 
 export default Userperfil;
+
