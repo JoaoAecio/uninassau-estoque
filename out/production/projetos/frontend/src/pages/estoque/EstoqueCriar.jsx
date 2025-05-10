@@ -1,34 +1,50 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Para redirecionar após salvar
-import { createProduct } from "../../services/productService"; // Serviço para criar produtos
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { createProduct } from "../../services/productService";
+import { getAllCategories } from "../../services/categoryService";
+import { getAllSuppliers } from "../../services/supplierService"; // Assumindo que você tem isso
+import { toast } from "react-toastify";
 
 const EstoqueCriar = () => {
   const [formData, setFormData] = useState({
     nome: "",
     quantidade: "",
-    categoriaId: "", // Campo para ID da categoria
-    supplierId: "", // Campo para ID do fornecedor
-    dataCompra: "", // Campo para data de entrada (compra)
-    dataValidade: "", // Campo para data de validade
-    price: "", // Campo para preço
+    categoriaId: "",
+    supplierId: "",
+    dataCompra: "",
+    dataValidade: "",
+    price: "",
   });
 
-  const navigate = useNavigate(); // Para redirecionar após salvar
+  const [categorias, setCategorias] = useState([]);
+  const [fornecedores, setFornecedores] = useState([]);
+  const navigate = useNavigate();
 
-  // Função para lidar com mudanças nos campos
-  const handleChange = (event) => {
-    const { id, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
+  useEffect(() => {
+    const fetchDados = async () => {
+      try {
+        const categoriasData = await getAllCategories();
+        const fornecedoresData = await getAllSuppliers();
+        setCategorias(categoriasData);
+        setFornecedores(fornecedoresData);
+      } catch (error) {
+        toast.error("Erro ao carregar categorias ou fornecedores");
+        console.error(error);
+      }
+    };
+
+    fetchDados();
+  }, []);
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  // Função para enviar os dados ao backend
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Previne o comportamento padrão do formulário
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await createProduct({
+      await createProduct({
         name: formData.nome,
         quantity: parseInt(formData.quantidade),
         categoryId: parseInt(formData.categoriaId),
@@ -38,150 +54,150 @@ const EstoqueCriar = () => {
         price: parseFloat(formData.price),
       });
 
-      console.log("Produto criado com sucesso:", response);
-      alert("Produto criado com sucesso!");
-
-      // Redirecionar para página de estoque
+      toast.success("Produto criado com sucesso!");
       navigate("/estoqueindex");
-    } catch (error) {
-      console.error("Erro ao criar produto:", error);
-      alert("Erro ao criar produto. Verifique os campos e tente novamente.");
+    } catch (err) {
+      console.error("Erro ao criar produto:", err);
+      toast.error("Erro ao criar produto. Verifique os campos.");
     }
   };
 
   return (
-    <div className="flex flex-col gap-8 p-4">
-      {/* Cabeçalho com título e botões */}
-      <div className="flex items-center gap-4">
-        <h1 className="text-lg font-medium">ADICIONAR ITEM AO ESTOQUE</h1>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold text-indigo-700 mb-6">Adicionar Novo Produto</h1>
 
-        {/* Botão de Voltar */}
-        <a
-          className="inline-block min-w-[120px] px-6 py-3 text-center rounded-sm border border-red-600 bg-red-600 text-sm font-medium text-white hover:bg-transparent hover:text-red-600 focus:ring-3 focus:outline-hidden"
-          href="/estoqueindex"
-        >
-          Voltar
-        </a>
-      </div>
-
-      {/* Formulário para Adicionar Item */}
       <form
-        className="rounded-xl bg-white p-4 ring-3 ring-indigo-50 sm:p-6 lg:p-8"
         onSubmit={handleSubmit}
+        className="space-y-6 bg-white p-6 rounded-lg shadow border border-gray-200"
       >
-        <div className="flex flex-wrap gap-6">
-          {/* Campo Nome do Item */}
-          <div className="w-64">
-            <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
-              Nome do Item
-            </label>
-            <input
-              type="text"
-              id="nome"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
-              placeholder="Insira o nome do item"
-              value={formData.nome}
-              onChange={handleChange}
-            />
-          </div>
+        {/* Informações Básicas */}
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Informações Básicas</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="nome" className="text-sm font-medium text-gray-700">Nome</label>
+              <input
+                type="text"
+                id="nome"
+                placeholder="Ex: Perfume Aqua"
+                value={formData.nome}
+                onChange={handleChange}
+                className="w-full rounded border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
 
-          {/* Campo Quantidade */}
-          <div className="w-64">
-            <label htmlFor="quantidade" className="block text-sm font-medium text-gray-700">
-              Quantidade
-            </label>
-            <input
-              type="number"
-              id="quantidade"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
-              placeholder="Insira a quantidade"
-              value={formData.quantidade}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Campo ID da Categoria */}
-          <div className="w-64">
-            <label htmlFor="categoriaId" className="block text-sm font-medium text-gray-700">
-              ID da Categoria
-            </label>
-            <input
-              type="number"
-              id="categoriaId"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
-              placeholder="Insira o ID da categoria"
-              value={formData.categoriaId}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Campo ID do Fornecedor */}
-          <div className="w-64">
-            <label htmlFor="supplierId" className="block text-sm font-medium text-gray-700">
-              ID do Fornecedor
-            </label>
-            <input
-              type="number"
-              id="supplierId"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
-              placeholder="Insira o ID do fornecedor"
-              value={formData.supplierId}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Campo Data de Compra */}
-          <div className="w-64">
-            <label htmlFor="dataCompra" className="block text-sm font-medium text-gray-700">
-              Data de Compra
-            </label>
-            <input
-              type="date"
-              id="dataCompra"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
-              value={formData.dataCompra}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Campo Data de Validade */}
-          <div className="w-64">
-            <label htmlFor="dataValidade" className="block text-sm font-medium text-gray-700">
-              Data de Validade
-            </label>
-            <input
-              type="date"
-              id="dataValidade"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
-              value={formData.dataValidade}
-              onChange={handleChange}
-            />
-          </div>
-
-          {/* Campo Preço */}
-          <div className="w-64">
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-              Preço
-            </label>
-            <input
-              type="number"
-              id="price"
-              step="0.01"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
-              placeholder="Insira o preço"
-              value={formData.price}
-              onChange={handleChange}
-            />
+            <div>
+              <label htmlFor="quantidade" className="text-sm font-medium text-gray-700">Quantidade</label>
+              <input
+                type="number"
+                id="quantidade"
+                placeholder="Ex: 50"
+                value={formData.quantidade}
+                onChange={handleChange}
+                className="w-full rounded border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
           </div>
         </div>
 
-        {/* Botão de Salvar */}
-        <button
-          type="submit"
-          className="mt-4 px-6 py-3 text-center rounded-sm border border-green-600 bg-green-600 text-sm font-medium text-white hover:bg-transparent hover:text-green-600 focus:ring-3 focus:outline-hidden"
-        >
-          Salvar
-        </button>
+        {/* Classificação */}
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Classificação</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="categoriaId" className="text-sm font-medium text-gray-700">Categoria</label>
+              <select
+                id="categoriaId"
+                value={formData.categoriaId}
+                onChange={handleChange}
+                className="w-full rounded border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">Selecione uma categoria</option>
+                {categorias.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.nameCategory}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="supplierId" className="text-sm font-medium text-gray-700">Fornecedor</label>
+              <select
+                id="supplierId"
+                value={formData.supplierId}
+                onChange={handleChange}
+                className="w-full rounded border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-500"
+              >
+                <option value="">Selecione um fornecedor</option>
+                {fornecedores.map((forn) => (
+                  <option key={forn.id} value={forn.id}>
+                    {forn.socialname}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Datas e Preço */}
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Validade e Preço</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="dataCompra" className="text-sm font-medium text-gray-700">Data de Compra</label>
+              <input
+                type="date"
+                id="dataCompra"
+                value={formData.dataCompra}
+                onChange={handleChange}
+                className="w-full rounded border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="dataValidade" className="text-sm font-medium text-gray-700">Data de Validade</label>
+              <input
+                type="date"
+                id="dataValidade"
+                value={formData.dataValidade}
+                onChange={handleChange}
+                className="w-full rounded border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="price" className="text-sm font-medium text-gray-700">Preço</label>
+              <input
+                type="number"
+                id="price"
+                step="0.01"
+                placeholder="Ex: 129.90"
+                value={formData.price}
+                onChange={handleChange}
+                className="w-full rounded border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Botões */}
+        <div className="pt-6 flex flex-col sm:flex-row gap-4">
+          <button
+            type="submit"
+            className="bg-green-600 hover:bg-green-700 transition px-6 py-3 rounded-lg text-white font-semibold w-full sm:w-auto"
+          >
+            Salvar Produto
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate("/estoqueindex")}
+            className="bg-gray-100 hover:bg-gray-200 transition px-6 py-3 rounded-lg text-gray-800 font-medium w-full sm:w-auto"
+          >
+            Voltar
+          </button>
+        </div>
       </form>
     </div>
   );

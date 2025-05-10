@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { uploadPlanilha, getAllProducts, deleteProduct } from "../../services/productService"; // Adiciona deleteProduct
-import { FaEdit } from "react-icons/fa"; // Ícone de edição
+import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { uploadPlanilha, getAllProducts, deleteProduct } from "../../services/productService";
+import { toast } from "react-toastify";
 
 const EstoqueIndex = () => {
-  const [products, setProducts] = useState([]); // Estado para armazenar os produtos
-  const [loading, setLoading] = useState(true); // Estado para gerenciar o carregamento
-  const [file, setFile] = useState(null); // Estado para armazenar o arquivo selecionado
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [file, setFile] = useState(null);
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
-  // Função para buscar produtos do backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getAllProducts(); // Busca os produtos
-        console.log("Produtos recebidos do backend:", data);
+        const data = await getAllProducts();
         setProducts(data);
       } catch (error) {
         console.error("Erro ao carregar os produtos:", error);
-        alert("Ocorreu um erro ao carregar os produtos.");
+        toast.error("Erro ao carregar os produtos.");
       } finally {
         setLoading(false);
       }
@@ -25,149 +27,135 @@ const EstoqueIndex = () => {
     fetchProducts();
   }, []);
 
-  // Função para lidar com a exclusão de um produto
   const handleDelete = async (id) => {
-    const confirmacao = window.confirm("Tem certeza de que deseja deletar este produto?");
-    if (!confirmacao) return;
+    if (!window.confirm("Tem certeza de que deseja deletar este produto?")) return;
 
     try {
-      await deleteProduct(id); // Chama a API para excluir o produto
-      alert("Produto deletado com sucesso!");
-
-      // Atualiza a lista de produtos após a exclusão
-      setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+      await deleteProduct(id);
+      toast.success("Produto deletado com sucesso!");
+      setProducts((prev) => prev.filter((p) => p.id !== id));
     } catch (error) {
       console.error("Erro ao deletar produto:", error);
-      alert("Erro ao deletar o produto. Tente novamente.");
+      toast.error("Erro ao deletar o produto.");
     }
   };
 
-  // Função para lidar com a seleção de arquivo
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-
-  // Função para realizar o upload
   const handleUpload = async () => {
+    if (!file) return toast.warn("Selecione um arquivo antes do upload.");
     try {
-      if (file) {
-        const response = await uploadPlanilha(file);
-        console.log("Upload realizado com sucesso:", response);
-        alert("Upload realizado com sucesso!");
-      } else {
-        alert("Por favor, selecione um arquivo antes de fazer o upload.");
-      }
+      await uploadPlanilha(file);
+      toast.success("Upload realizado com sucesso!");
     } catch (error) {
-      console.error("Erro ao enviar a planilha:", error);
-      alert("Ocorreu um erro ao enviar a planilha. Verifique o console para mais detalhes.");
+      console.error("Erro ao enviar planilha:", error);
+      toast.error("Erro ao enviar planilha.");
     }
   };
-
-  // Exibe mensagem de carregamento
-  if (loading) {
-    return <p>Carregando produtos...</p>;
-  }
 
   const formatarData = (data) => {
-    if (!data) return "Sem data"; // Trata valores nulos ou indefinidos
+    if (!data) return "Sem data";
     try {
       const parsedDate = new Date(data);
-      if (!isNaN(parsedDate.getTime())) {
-        return parsedDate.toLocaleDateString("pt-BR");
-      }
-      const [year, month, day] = data.split("-");
-      if (year && month && day) {
-        return `${day}/${month}/${year}`;
-      }
-      return "Data inválida";
-    } catch (error) {
-      console.error("Erro ao formatar data:", error);
+      return !isNaN(parsedDate) ? parsedDate.toLocaleDateString("pt-BR") : "Data inválida";
+    } catch {
       return "Data inválida";
     }
   };
 
+  const produtosFiltrados = products.filter((produto) =>
+    produto.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  if (loading) return <p className="p-6">Carregando produtos...</p>;
+
   return (
-    <div>
-      <div className="flex items-center gap-4">
-        <h1 className="text-lg font-medium">GERENCIAR ESTOQUE</h1>
-        <a
-          className="inline-block min-w-[120px] px-6 py-3 text-center rounded-sm border border-indigo-600 bg-indigo-600 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:ring-3 focus:outline-hidden"
-          href="/estoque/criar"
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold text-indigo-600">Estoque</h1>
+        <Link
+          to="/estoque/criar"
+          className="rounded-lg bg-green-600 px-4 py-2 text-white font-medium hover:bg-green-700"
         >
           Adicionar Item
-        </a>
-        <a
-          className="inline-block min-w-[120px] px-6 py-3 text-center rounded-sm border border-red-600 bg-red-600 text-sm font-medium text-white hover:bg-transparent hover:text-red-600 focus:ring-3 focus:outline-hidden"
-          href="/dashboard"
-        >
-          Voltar
-        </a>
+        </Link>
       </div>
 
-      <div className="mt-4">
+      <div className="flex items-center gap-2 mb-4">
+        <FaSearch className="text-gray-500" />
+        <input
+          type="text"
+          placeholder="Buscar por nome do item"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border border-gray-300 rounded px-3 py-1 w-full max-w-sm"
+        />
+      </div>
+
+      <div className="mb-6">
         <h2 className="text-lg font-medium">Upload de Planilha</h2>
         <div className="flex items-center gap-2 mt-2">
           <input
             type="file"
-            onChange={handleFileChange}
-            className="border border-gray-300 px-4 py-2 rounded-sm focus:ring-2 focus:ring-indigo-600"
+            onChange={(e) => setFile(e.target.files[0])}
+            className="border border-gray-300 px-4 py-2 rounded-sm"
           />
           <button
             onClick={handleUpload}
-            className="px-4 py-2 text-white bg-green-600 rounded-sm hover:bg-green-700 focus:ring-2 focus:ring-green-600"
+            className="px-4 py-2 text-white bg-green-600 rounded hover:bg-green-700"
           >
             Upload
           </button>
         </div>
       </div>
 
-      <div className="mt-12">
-        <div className="overflow-x-auto rounded-lg shadow">
-          <table className="min-w-full divide-y divide-gray-200 bg-white text-sm">
-            <thead className="bg-blue-600">
-              <tr>
-                <th className="px-4 py-2 font-medium text-left text-white">Nome do Item</th>
-                <th className="px-4 py-2 font-medium text-left text-white">Quantidade</th>
-                <th className="px-4 py-2 font-medium text-left text-white">Categoria</th>
-                <th className="px-4 py-2 font-medium text-left text-white">Data de Entrada</th>
-                <th className="px-4 py-2 font-medium text-left text-white">Ações</th>
+      <div className="overflow-x-auto rounded-lg border border-gray-200">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Nome do Item</th>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Quantidade</th>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Categoria</th>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Data de Entrada</th>
+              <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Ações</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100 bg-white">
+            {produtosFiltrados.map((product) => (
+              <tr key={product.id}>
+                <td className="px-4 py-2 text-sm text-gray-800">{product.name}</td>
+                <td className="px-4 py-2 text-sm text-gray-800">{product.quantity}</td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  {product.category?.nameCategory || "Sem categoria"}
+                </td>
+                <td className="px-4 py-2 text-sm text-gray-800">
+                  {formatarData(product.dataCompra)}
+                </td>
+                <td className="px-4 py-2 flex gap-3 items-center">
+                  <button
+                    onClick={() => navigate(`/estoque/editar/${product.id}`)}
+                    className="text-indigo-600 hover:text-indigo-800"
+                    title="Editar"
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(product.id)}
+                    className="text-red-600 hover:text-red-800"
+                    title="Excluir"
+                  >
+                    <FaTrash />
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {products.map((product) => (
-                <tr key={product.id} className="hover:bg-gray-100">
-                  <td className="px-4 py-2 font-medium text-gray-900">{product.name}</td>
-                  <td className="px-4 py-2 text-gray-700">{product.quantity}</td>
-                  <td className="px-4 py-2 text-gray-700">
-                    {product.category ? product.category.nameCategory : "Sem categoria"}
-                  </td>
-                  <td className="px-4 py-2 text-gray-700">{formatarData(product.dataCompra)}</td>
-                  <td className="px-4 py-2 text-gray-700">
-                    <a
-                      href={`/estoque/editar/${product.id}`}
-                      className="inline-block px-2 py-1 text-white bg-blue-600 rounded-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-600"
-                    >
-                      <FaEdit />
-                    </a>
-                    <button
-                      onClick={() => handleDelete(product.id)}
-                      className="ml-2 px-2 py-1 text-white bg-red-600 rounded-sm hover:bg-red-700 focus:ring-2 focus:ring-red-600"
-                    >
-                      Deletar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {products.length === 0 && (
-                <tr>
-                  <td colSpan="5" className="px-4 py-2 text-center text-gray-500">
-                    Nenhum produto encontrado.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+            ))}
+            {produtosFiltrados.length === 0 && (
+              <tr>
+                <td colSpan="5" className="px-4 py-2 text-center text-gray-500">
+                  Nenhum produto encontrado.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Para pegar o ID do produto e redirecionar
-import { getProductById, updateProduct } from "../../services/productService"; // Serviços para buscar e atualizar produto
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getProductById, updateProduct } from "../../services/productService";
+import { getAllCategories } from "../../services/categoryService";
+import { getAllSuppliers } from "../../services/supplierService";
 
 const EstoqueEditar = () => {
-  const { id } = useParams(); // Obtém o ID do produto da URL
-  const navigate = useNavigate(); // Para redirecionar após a edição
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     nome: "",
@@ -16,48 +18,49 @@ const EstoqueEditar = () => {
     price: "",
   });
 
-  const [loading, setLoading] = useState(true); // Controla o carregamento dos dados
+  const [categorias, setCategorias] = useState([]);
+  const [fornecedores, setFornecedores] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Função para buscar o produto pelo ID
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchData = async () => {
       try {
-        const product = await getProductById(id); // Busca o produto pelo ID
-        if (!product) throw new Error("Produto não encontrado.");
+        const [product, categoriasData, fornecedoresData] = await Promise.all([
+          getProductById(id),
+          getAllCategories(),
+          getAllSuppliers(),
+        ]);
 
-        // Preenche o formulário com os dados do produto
+        setCategorias(categoriasData);
+        setFornecedores(fornecedoresData);
+
         setFormData({
           nome: product.name || "",
           quantidade: product.quantity || "",
-          categoriaId: product.category?.id || "", // Tratando caso `category` seja undefined
-          supplierId: product.supplier?.id || "", // Tratando caso `supplier` seja undefined
+          categoriaId: product.category?.id || "",
+          supplierId: product.supplier?.id || "",
           dataCompra: product.dataCompra || "",
           dataValidade: product.dataValidade || "",
           price: product.price || "",
         });
       } catch (error) {
-        console.error("Erro ao buscar produto:", error);
-        alert("Erro ao carregar os dados do produto.");
+        console.error("Erro ao carregar dados:", error);
+        alert("Erro ao carregar dados do produto.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProduct();
+    fetchData();
   }, [id]);
 
-  // Função para lidar com mudanças nos campos do formulário
-  const handleChange = (event) => {
-    const { id, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  // Função para enviar as alterações ao backend
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Previne o comportamento padrão do formulário
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       await updateProduct(id, {
         name: formData.nome,
@@ -70,7 +73,6 @@ const EstoqueEditar = () => {
       });
 
       alert("Produto atualizado com sucesso!");
-      // Redirecionar para página de estoque
       navigate("/estoqueindex");
     } catch (error) {
       console.error("Erro ao atualizar produto:", error);
@@ -78,139 +80,145 @@ const EstoqueEditar = () => {
     }
   };
 
-  // Exibe mensagem de carregamento
-  if (loading) {
-    return <p>Carregando dados do produto...</p>;
-  }
+  if (loading) return <p className="p-6">Carregando dados do produto...</p>;
 
   return (
-    <div className="flex flex-col gap-8 p-4">
-      {/* Cabeçalho com título e botões */}
-      <div className="flex items-center gap-4">
-        <h1 className="text-lg font-medium">EDITAR PRODUTO</h1>
-
-        {/* Botão de Voltar */}
-        <a
-          className="inline-block min-w-[120px] px-6 py-3 text-center rounded-sm border border-red-600 bg-red-600 text-sm font-medium text-white hover:bg-transparent hover:text-red-600 focus:ring-3 focus:outline-hidden"
-          href="/estoqueindex"
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold text-indigo-600">Editar Produto</h1>
+        <button
+          onClick={() => navigate("/estoqueindex")}
+          className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
         >
           Voltar
-        </a>
+        </button>
       </div>
 
-      {/* Formulário para Editar Produto */}
       <form
-        className="rounded-xl bg-white p-4 ring-3 ring-indigo-50 sm:p-6 lg:p-8"
         onSubmit={handleSubmit}
+        className="space-y-6 bg-white p-6 rounded-lg shadow border border-gray-200"
       >
-        <div className="flex flex-wrap gap-6">
-          {/* Campo Nome do Produto */}
-          <div className="w-64">
-            <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="nome" className="text-sm font-medium text-gray-700">
               Nome do Produto
             </label>
             <input
               type="text"
               id="nome"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
               value={formData.nome}
               onChange={handleChange}
+              className="w-full rounded border border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-600"
             />
           </div>
 
-          {/* Campo Quantidade */}
-          <div className="w-64">
-            <label htmlFor="quantidade" className="block text-sm font-medium text-gray-700">
+          <div>
+            <label htmlFor="quantidade" className="text-sm font-medium text-gray-700">
               Quantidade
             </label>
             <input
               type="number"
               id="quantidade"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
               value={formData.quantidade}
               onChange={handleChange}
+              className="w-full rounded border border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-600"
             />
           </div>
 
-          {/* Campo ID da Categoria */}
-          <div className="w-64">
-            <label htmlFor="categoriaId" className="block text-sm font-medium text-gray-700">
-              ID da Categoria
+          <div>
+            <label htmlFor="categoriaId" className="text-sm font-medium text-gray-700">
+              Categoria
             </label>
-            <input
-              type="number"
+            <select
               id="categoriaId"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
               value={formData.categoriaId}
               onChange={handleChange}
-            />
+              className="w-full rounded border border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-600"
+            >
+              <option value="">Selecione uma categoria</option>
+              {categorias.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.nameCategory}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Campo ID do Fornecedor */}
-          <div className="w-64">
-            <label htmlFor="supplierId" className="block text-sm font-medium text-gray-700">
-              ID do Fornecedor
+          <div>
+            <label htmlFor="supplierId" className="text-sm font-medium text-gray-700">
+              Fornecedor
             </label>
-            <input
-              type="number"
+            <select
               id="supplierId"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
               value={formData.supplierId}
               onChange={handleChange}
-            />
+              className="w-full rounded border border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-600"
+            >
+              <option value="">Selecione um fornecedor</option>
+              {fornecedores.map((f) => (
+                <option key={f.id} value={f.id}>
+                  {f.socialname}
+                </option>
+              ))}
+            </select>
           </div>
 
-          {/* Campo Data de Compra */}
-          <div className="w-64">
-            <label htmlFor="dataCompra" className="block text-sm font-medium text-gray-700">
+          <div>
+            <label htmlFor="dataCompra" className="text-sm font-medium text-gray-700">
               Data de Compra
             </label>
             <input
               type="date"
               id="dataCompra"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
               value={formData.dataCompra}
               onChange={handleChange}
+              className="w-full rounded border border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-600"
             />
           </div>
 
-          {/* Campo Data de Validade */}
-          <div className="w-64">
-            <label htmlFor="dataValidade" className="block text-sm font-medium text-gray-700">
+          <div>
+            <label htmlFor="dataValidade" className="text-sm font-medium text-gray-700">
               Data de Validade
             </label>
             <input
               type="date"
               id="dataValidade"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
               value={formData.dataValidade}
               onChange={handleChange}
+              className="w-full rounded border border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-600"
             />
           </div>
 
-          {/* Campo Preço */}
-          <div className="w-64">
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+          <div>
+            <label htmlFor="price" className="text-sm font-medium text-gray-700">
               Preço
             </label>
             <input
               type="number"
-              id="price"
               step="0.01"
-              className="mt-1 block w-full rounded-md border border-gray-300 p-2 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
+              id="price"
               value={formData.price}
               onChange={handleChange}
+              className="w-full rounded border border-gray-300 p-2 mt-1 focus:ring-2 focus:ring-indigo-600"
             />
           </div>
         </div>
 
-        {/* Botão de Salvar */}
-        <button
-          type="submit"
-          className="mt-4 px-6 py-3 text-center rounded-sm border border-green-600 bg-green-600 text-sm font-medium text-white hover:bg-transparent hover:text-green-600 focus:ring-3 focus:outline-hidden"
-        >
-          Salvar Alterações
-        </button>
+        <div className="pt-6 flex gap-4">
+          <button
+            type="submit"
+            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+          >
+            Salvar Alterações
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate("/estoqueindex")}
+            className="bg-gray-200 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-300"
+          >
+            Cancelar
+          </button>
+        </div>
       </form>
     </div>
   );

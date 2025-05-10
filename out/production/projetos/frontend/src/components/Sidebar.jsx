@@ -53,9 +53,9 @@ const Sidebar = ({ isCompact }) => {
           href: "/user",
         },
         {
-          title: "Categoria",
+          title: "Categorias",
           icon: <FiFolderPlus className="size-5" />,
-          href: "#",
+          href: "/categorias",
         },
       ],
     },

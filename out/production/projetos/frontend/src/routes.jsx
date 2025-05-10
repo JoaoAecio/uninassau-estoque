@@ -8,7 +8,6 @@ import EsqueciSenha from "./pages/EsqueciSenha";
 // Páginas privadas
 import Dashboard from "./pages/Dashboard";
 import Estoque from "./pages/Estoque";
-import Produtos from "./pages/Produtos";
 import RelatorioEstoque from "./pages/RelatorioEstoque";
 import RelatoriosPedidos from "./pages/RelatorioPedidos";
 import UsuarioCriar from "./pages/user/UsuarioCriar";
@@ -21,6 +20,11 @@ import EstoqueIndex from "./pages/estoque/EstoqueIndex";
 import EstoqueCriar from "./pages/estoque/EstoqueCriar";
 import EstoqueEditar from "./pages/estoque/EstoqueEditar";
 import Userperfil from "./pages/userperfil/Userperfil";
+
+// Categorias
+import CategoriasIndex from "./pages/categorias/CategoriasIndex";
+import CategoriasCriar from "./pages/categorias/CategoriasCriar";
+import CategoriasEditar from "./pages/categorias/CategoriasEditar";
 
 // Outros
 import Error from "./pages/Error";
@@ -38,7 +42,6 @@ const RoutesComponent = () => {
       <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/estoque" element={<Estoque />} />
-        <Route path="/produtos" element={<Produtos />} />
         <Route path="/relatorioestoque" element={<RelatorioEstoque />} />
         <Route path="/relatoriopedidos" element={<RelatoriosPedidos />} />
         <Route path="/user/criar" element={<UsuarioCriar />} />
@@ -51,6 +54,11 @@ const RoutesComponent = () => {
         <Route path="/estoque/criar" element={<EstoqueCriar />} />
         <Route path="/estoque/editar/:id" element={<EstoqueEditar />} />
         <Route path="/perfil" element={<Userperfil />} />
+
+        {/* Categorias */}
+        <Route path="/categorias" element={<CategoriasIndex />} />
+        <Route path="/categorias/criar" element={<CategoriasCriar />} />
+        <Route path="/categorias/editar/:id" element={<CategoriasEditar />} />
       </Route>
 
       {/* Rota de erro 404 */}
