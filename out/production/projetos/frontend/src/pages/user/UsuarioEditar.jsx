@@ -73,7 +73,7 @@ const UsuarioEditar = () => {
   const fetchUsuario = async (token) => {
     try {
       console.log("Buscando usuário com ID:", id);
-      const response = await fetch(`http://localhost:8080/user/get/${id}`, {
+      const response = await fetch(`https://backend-estoque-clinica-1.onrender.com/user/get/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +132,7 @@ const UsuarioEditar = () => {
     }
     
     try {
-      const response = await fetch(`http://localhost:8080/user/update/${id}`, {
+      const response = await fetch(`https://backend-estoque-clinica-1.onrender.com/user/update/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

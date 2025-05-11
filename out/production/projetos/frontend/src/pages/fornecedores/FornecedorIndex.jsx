@@ -17,7 +17,7 @@ const FornecedoresIndex = () => {
   const fetchFornecedores = async () => {
     try {
       console.log("Buscando lista de fornecedores...");
-      const response = await fetch("http://localhost:8080/suppliers", {
+      const response = await fetch("https://backend-estoque-clinica-1.onrender.com/suppliers", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const FornecedoresIndex = () => {
     try {
       console.log(`Excluindo fornecedor com ID: ${id}`);
       const response = await fetch(
-          `http://localhost:8080/suppliers/delete/${id}`,
+          `https://backend-estoque-clinica-1.onrender.com/suppliers/delete/${id}`,
           {
             method: "DELETE",
             headers: {
