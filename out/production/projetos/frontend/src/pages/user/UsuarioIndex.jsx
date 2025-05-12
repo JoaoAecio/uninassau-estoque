@@ -17,7 +17,7 @@ const UsuarioIndex = () => {
 
   const fetchUsuarios = async () => {
     try {
-      const response = await fetch("http://localhost:8080/user", {
+      const response = await fetch("https://backend-estoque-clinica-1.onrender.com/user", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +48,7 @@ const UsuarioIndex = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/user/delete/${userIdParaExcluir}`,
+        `https://backend-estoque-clinica-1.onrender.com/user/delete/${userIdParaExcluir}`,
         {
           method: "DELETE",
           headers: {

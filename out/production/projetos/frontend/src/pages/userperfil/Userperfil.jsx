@@ -23,7 +23,7 @@ const Userperfil = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:8080/profile", {
+        const response = await fetch("https://backend-estoque-clinica-1.onrender.com/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -72,7 +72,7 @@ const Userperfil = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/user/update", {
+      const response = await fetch("https://backend-estoque-clinica-1.onrender.com/user/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

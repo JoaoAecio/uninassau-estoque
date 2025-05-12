@@ -38,25 +38,27 @@ export const getTokenPayload = () => {
 
 export const login = async (credentials) => {
   try {
-    const response = await fetch("http://localhost:8080/auth/login", {
+    const response = await fetch("https://backend-estoque-clinica-1.onrender.com/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Accept": "application/json", // <-- Adicionado!
       },
       body: JSON.stringify(credentials),
     });
 
     if (!response.ok) {
-      throw new Error("Erro ao fazer login");
+      throw new Error(`Erro ao fazer login: ${response.status}`);
     }
 
     const data = await response.json();
-    return data; // Espera: { token: "...", ... }
+    return data;
   } catch (error) {
     console.error("Erro na autenticação:", error);
     throw error;
   }
 };
+
 
 export const logout = () => {
   localStorage.removeItem("token");
