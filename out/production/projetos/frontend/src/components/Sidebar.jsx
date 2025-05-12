@@ -12,12 +12,39 @@ import {
 } from "react-icons/fi";
 
 const Sidebar = ({ isCompact }) => {
-  const usuarioLogado = {
-    nome: "Eric Frusciante",
-    id: "12345",
-    avatar:
-      "https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1770&q=80",
-  };
+  const [usuarioLogado, setUsuarioLogado] = useState({
+    nome: "",
+    email: "",
+    avatar: "https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1770&q=80",
+  });
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const response = await fetch("http://localhost:8080/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error("Erro ao carregar perfil");
+
+        const data = await response.json();
+        setUsuarioLogado({
+          nome: data.name || "Usuário",
+          email: data.email || "Não informado",
+          avatar: data.avatarUrl || usuarioLogado.avatar,
+        });
+
+      } catch (error) {
+        console.error("Erro ao carregar perfil:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
 
   const [activeSubmenu, setActiveSubmenu] = useState(null);
   // eslint-disable-next-line no-unused-vars
@@ -89,9 +116,8 @@ const Sidebar = ({ isCompact }) => {
 
   return (
     <div
-      className={`h-full flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ${
-        isCompact ? "w-16" : "w-64"
-      }`}
+      className={`h-full flex flex-col bg-white border-r border-gray-200 transition-all duration-300 ${isCompact ? "w-16" : "w-64"
+        }`}
     >
       {/* Logo */}
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">
@@ -117,11 +143,10 @@ const Sidebar = ({ isCompact }) => {
                 <>
                   <button
                     onClick={() => toggleSubmenu(index)}
-                    className={`w-full flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium ${
-                      activeSubmenu === index
-                        ? "bg-gray-100 text-gray-900"
-                        : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                    }`}
+                    className={`w-full flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium ${activeSubmenu === index
+                      ? "bg-gray-100 text-gray-900"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       {item.icon}
@@ -141,9 +166,8 @@ const Sidebar = ({ isCompact }) => {
                         <li key={subIndex}>
                           <a
                             href={subItem.href}
-                            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm ${
-                              isCompact ? "justify-center" : ""
-                            } text-gray-600 hover:bg-gray-100 hover:text-gray-900`}
+                            className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm ${isCompact ? "justify-center" : ""
+                              } text-gray-600 hover:bg-gray-100 hover:text-gray-900`}
                           >
                             {subItem.icon}
                             {!isCompact && <span>{subItem.title}</span>}
@@ -156,9 +180,8 @@ const Sidebar = ({ isCompact }) => {
               ) : (
                 <a
                   href={item.href}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium ${
-                    isCompact ? "justify-center" : ""
-                  } text-gray-600 hover:bg-gray-100 hover:text-gray-900`}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium ${isCompact ? "justify-center" : ""
+                    } text-gray-600 hover:bg-gray-100 hover:text-gray-900`}
                 >
                   {item.icon}
                   {!isCompact && <span>{item.title}</span>}
@@ -174,9 +197,8 @@ const Sidebar = ({ isCompact }) => {
         <div className="border-t border-gray-200 p-4">
           <a
             href="/perfil"
-            className={`flex items-center gap-3 hover:bg-gray-50 p-2 rounded-lg ${
-              isCompact ? "justify-center" : ""
-            }`}
+            className={`flex items-center gap-3 hover:bg-gray-50 p-2 rounded-lg ${isCompact ? "justify-center" : ""
+              }`}
           >
             <img
               alt="Avatar"
@@ -189,7 +211,7 @@ const Sidebar = ({ isCompact }) => {
                   {usuarioLogado.nome}
                 </p>
                 <span className="text-xs text-gray-600">
-                  ID: {usuarioLogado.id}
+                  E-mail: {usuarioLogado.email}
                 </span>
               </div>
             )}
@@ -206,9 +228,8 @@ const Sidebar = ({ isCompact }) => {
           >
             <button
               type="submit"
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium ${
-                isCompact ? "justify-center" : ""
-              } text-red-500 hover:bg-red-100 hover:text-red-700 w-full`}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium ${isCompact ? "justify-center" : ""
+                } text-red-500 hover:bg-red-100 hover:text-red-700 w-full`}
             >
               <FiLogOut className="size-5" />
               {!isCompact && <span>Sair</span>}
