@@ -134,7 +134,7 @@ Usamos o Trello para gerenciar tarefas, com as seguintes listas:
 
 ---
 
-## 🔥 Próximos Passos
+## 📘 Como usar o sistema:
 ✅ Implementar as primeiras funcionalidades  
 ✅ Acompanhar o progresso no Trello  
 ✅ Resolver dúvidas e ajustar configurações conforme necessário  
