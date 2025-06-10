@@ -1,4 +1,4 @@
-<h1 align="center"> Sistema de Gestão de Estoque Para Clínicas </h1>
+![image](https://github.com/user-attachments/assets/61f6ba6d-fbd7-450a-8888-b864e5b6fc91)<h1 align="center"> Sistema de Gestão de Estoque Para Clínicas </h1>
 
  <p align="center">
   <img alt="Status" src="https://img.shields.io/badge/Status-Em_Desenvolvimento-green?style=for-the-badge">
@@ -135,9 +135,9 @@ Usamos o Trello para gerenciar tarefas, com as seguintes listas:
 ---
 
 ## 📘 Como usar o sistema:
-✅ Implementar as primeiras funcionalidades  
-✅ Acompanhar o progresso no Trello  
-✅ Resolver dúvidas e ajustar configurações conforme necessário  
+1. Para entrar no sistema, devemos acessar https://estoqueuninassau.netlify.app/
+   ![image](https://github.com/user-attachments/assets/795b1ffd-e747-49fa-af09-76833f986d96)
+
 
 ---
 
