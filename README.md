@@ -135,8 +135,11 @@ Usamos o Trello para gerenciar tarefas, com as seguintes listas:
 ---
 
 ## 📘 Como usar o sistema:
-1. Para entrar no sistema, devemos acessar https://estoqueuninassau.netlify.app/
-   ![image](https://github.com/user-attachments/assets/795b1ffd-e747-49fa-af09-76833f986d96)
+1. Para entrar no sistema, devemos acessar [estoqueuninassau.netlify.app](https://estoqueuninassau.netlify.app/)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/795b1ffd-e747-49fa-af09-76833f986d96" alt="Print do sistema" width="600"/>
+</p>
 
 
 ---
