@@ -115,7 +115,7 @@ const UsuarioCriar = () => {
       console.log("Enviando dados para API:", userData);
       await createUser(userData);
       toast.success("Usuário criado com sucesso!");
-      navigate("/UsuarioIndex");
+      navigate("/user");
     } catch (err) {
       console.error("Erro na validação:", err);
       if (err.inner) {
