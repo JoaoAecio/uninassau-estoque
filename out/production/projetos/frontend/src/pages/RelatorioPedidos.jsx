@@ -18,12 +18,16 @@ const RelatoriosPedidos = () => {
     const acceptHeader = isExcel
       ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       : "application/pdf";
-    const fileName = isExcel ? `relatorio_pedido_${purchaseId}.xlsx` : `relatorio_pedido_${purchaseId}.pdf`;
+    const fileName = isExcel
+      ? `relatorio_pedido_${purchaseId}.xlsx`
+      : `relatorio_pedido_${purchaseId}.pdf`;
 
     try {
       const token = localStorage.getItem("token");
       if (isExcel && !token) {
-        throw new Error("Usuário não autenticado. Faça login como administrador.");
+        throw new Error(
+          "Usuário não autenticado. Faça login como administrador."
+        );
       }
 
       const response = await fetch(url, {
@@ -38,9 +42,12 @@ const RelatoriosPedidos = () => {
         const errorText = await response.text();
         let errorMessage = `Erro ao gerar o relatório: ${response.status} - ${errorText}`;
         if (response.status === 401) {
-          errorMessage = "Erro de autenticação: Token inválido ou expirado. Faça login novamente.";
+          errorMessage =
+            "Erro de autenticação: Token inválido ou expirado. Faça login novamente.";
         } else if (response.status === 403) {
-          errorMessage = `Acesso negado: Você precisa de permissões de administrador. Verifique se o token contém o papel 'ADMIN'. Token atual: ${token ? "presente" : "ausente"}.`;
+          errorMessage = `Acesso negado: Você precisa de permissões de administrador. Verifique se o token contém o papel 'ADMIN'. Token atual: ${
+            token ? "presente" : "ausente"
+          }.`;
         } else if (response.status === 404) {
           errorMessage = `Pedido com ID ${purchaseId} não encontrado.`;
         }
@@ -56,7 +63,11 @@ const RelatoriosPedidos = () => {
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(urlBlob);
-      alert(`Relatório ${isExcel ? "Excel" : "PDF"} do pedido ${purchaseId} gerado com sucesso!`);
+      alert(
+        `Relatório ${
+          isExcel ? "Excel" : "PDF"
+        } do pedido ${purchaseId} gerado com sucesso!`
+      );
     } catch (error) {
       console.error(`Erro ao gerar relatório (${type}):`, error.message);
       alert(`Falha ao gerar o relatório (${type}): ${error.message}`);
@@ -68,10 +79,15 @@ const RelatoriosPedidos = () => {
   return (
     <div className="p-4">
       <h1 className="text-lg font-medium">Relatórios de Pedidos</h1>
-      <p className="mt-4">Gere relatórios dos pedidos realizados de forma rápida e eficiente.</p>
+      <p className="mt-4">
+        Gere relatórios dos pedidos realizados de forma rápida e eficiente.
+      </p>
 
       <div className="mt-4">
-        <label htmlFor="purchaseId" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="purchaseId"
+          className="block text-sm font-medium text-gray-700"
+        >
           ID do Pedido
         </label>
         <input
@@ -85,13 +101,13 @@ const RelatoriosPedidos = () => {
         />
       </div>
 
-      <button
+      {/* <button
         onClick={() => gerarRelatorio("excel")}
         className="mt-4 inline-block px-6 py-3 text-center rounded-sm border border-blue-600 bg-blue-600 text-sm font-medium text-white hover:bg-transparent hover:text-blue-600 focus:ring-3 focus:outline-hidden"
         disabled={loading}
       >
         {loading ? "Gerando..." : "Gerar Relatório Excel"}
-      </button>
+      </button> */}
 
       <button
         onClick={() => gerarRelatorio("pdf")}
