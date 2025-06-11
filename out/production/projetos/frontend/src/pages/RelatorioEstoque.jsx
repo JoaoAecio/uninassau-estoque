@@ -7,8 +7,8 @@ const Relatorios = () => {
     setLoading(true);
     const isExcel = type === "excel";
     const url = isExcel
-      ? "https://estoqueuninassau.netlify.app/api/reports/stock" // URL do backend
-      : "https://estoqueuninassau.netlify.app/api/reports/pdf";
+      ? "https://backend-estoque-clinica-1.onrender.com/api/reports/stock" // URL do backend
+      : "https://backend-estoque-clinica-1.onrender.com/api/reports/pdf";
     const acceptHeader = isExcel
       ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       : "application/pdf";
