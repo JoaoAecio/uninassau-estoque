@@ -36,7 +36,15 @@ const RelatoriosPedidos = () => {
 
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`Erro ao gerar o relatório: ${response.status} - ${errorText}`);
+        let errorMessage = `Erro ao gerar o relatório: ${response.status} - ${errorText}`;
+        if (response.status === 401) {
+          errorMessage = "Erro de autenticação: Token inválido ou ausente. Faça login novamente.";
+        } else if (response.status === 403) {
+          errorMessage = "Acesso negado: Você precisa de permissões de administrador.";
+        } else if (response.status === 404) {
+          errorMessage = `Pedido com ID ${purchaseId} não encontrado.`;
+        }
+        throw new Error(errorMessage);
       }
 
       const blob = await response.blob();
