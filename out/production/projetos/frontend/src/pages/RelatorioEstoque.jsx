@@ -6,7 +6,7 @@ const Relatorios = () => {
   const gerarRelatorio = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/api/reports/stock", {
+      const response = await fetch("https://estoqueuninassau.netlify.app/api/reports/stock", {
         method: "GET",
         headers: {
           Accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
