@@ -132,9 +132,9 @@ const FornecedoresIndex = () => {
               <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
                 CEP
               </th>
-              <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+              {/* <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
                 Categoria
-              </th>
+              </th> */}
               <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">
                 Ações
               </th>
@@ -152,9 +152,9 @@ const FornecedoresIndex = () => {
                   <td className="px-4 py-2 text-sm text-gray-800">
                     {fornecedor.cep}
                   </td>
-                  <td className="px-4 py-2 text-sm text-gray-800">
+                  {/* <td className="px-4 py-2 text-sm text-gray-800">
                     {fornecedor.category?.name || "Sem categoria"}
-                  </td>
+                  </td> */}
                   <td className="px-4 py-2 flex gap-3 items-center">
                     <button
                         onClick={() => handleEdit(fornecedor)}
