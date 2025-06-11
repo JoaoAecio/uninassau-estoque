@@ -133,11 +133,76 @@ Usamos o Trello para gerenciar tarefas, com as seguintes listas:
 ---
 
 ## 📘 Como usar o sistema:
-1. Para entrar no sistema, devemos acessar [estoqueuninassau.netlify.app](https://estoqueuninassau.netlify.app/)
+📘 1. Para entrar no sistema, devemos acessar [estoqueuninassau.netlify.app](https://estoqueuninassau.netlify.app/). Nesta tela, os usuários do sistema realizam o acesso inserindo seu e-mail e senha cadastrados. A interface é simples e intuitiva, com um campo para e-mail, outro para senha e o botão "Entrar".
 
-![image](https://github.com/user-attachments/assets/40235250-19d8-40d5-be73-f70141eccc42)
+✅ Funcionalidades:
+
+- Autenticação de usuários.
+- Validação de credenciais antes de liberar o acesso ao sistema.
+- Opção de recuperação de senha ("Esqueceu a senha?").
+
+![image](https://github.com/user-attachments/assets/e626b8a2-a6fb-4f60-b3de-2b9d74616379)
 
 
+📘 2. O dashboard é a tela principal de visualização de métricas do estoque. Ele mostra dados resumidos e gráficos sobre a situação atual do inventário.
+
+✅ Funcionalidades:
+
+- Total de itens em estoque.
+- Itens com estoque baixo.
+- Quantidade de fornecedores cadastrados.
+- Produtos com estoque zerado.
+- Média de itens por produto.
+- Lista dos 5 produtos com menor estoque.
+- Fornecedores mais recentemente adicionados.
+
+![image](https://github.com/user-attachments/assets/eb24c3fa-c219-4b8c-b7d5-804668ebe0e6)
+
+
+📘 3. Esta é a interface de gerenciamento de usuários do sistema. Nela é possível visualizar uma lista com os dados dos usuários cadastrados, como nome, e-mail, CPF e data de nascimento.
+
+✅ Funcionalidades:
+
+- Pesquisa por nome, e-mail, CPF ou data.
+- Edição dos dados de cada usuário (ícone de lápis).
+- Exclusão de usuários (ícone de lixeira).
+- Criação de novos usuários via botão verde "Criar Usuário".
+
+![FotoUsuario](https://github.com/user-attachments/assets/3f302489-6d9b-412c-8c29-a7451519c7f6)
+
+📘 4. Essa tela oferece a gestão das categorias que organizam os produtos no sistema. As categorias ajudam a agrupar os itens por tipo ou finalidade (ex.: eletrônicos, odontológicos, higiene).
+
+✅ Funcionalidades:
+
+- Busca de categorias por nome.
+- Criação de novas categorias com o botão "Nova Categoria".
+- Edição e exclusão de categorias já cadastradas.
+- Permite manter o estoque organizado e facilita filtros e análises futuras.
+
+![image](https://github.com/user-attachments/assets/7970f1d3-e35e-4ec5-a03e-048b65f35da5)
+
+📘 5. Essa tela permite o gerenciamento completo dos itens cadastrados no estoque da clínica. Os produtos são listados com informações relevantes como nome, quantidade, categoria e data de entrada.
+
+✅ Funcionalidades:
+
+- Busca de itens por nome.
+- Upload de planilhas (.csv ou .xlsx) para importar dados em lote.
+- Criação de novos itens manualmente com o botão "Adicionar Item".
+- Edição e exclusão de produtos já existentes por meio dos ícones de lápis e lixeira.
+- Visualização da quantidade atual e da categoria de cada item cadastrado.
+
+![image](https://github.com/user-attachments/assets/8456b08f-67cb-4310-a6ce-c3a9f2de9b49)
+
+📘 6. Esta tela apresenta uma lista com os fornecedores cadastrados no sistema, com informações como razão social, CNPJ, CEP e categoria (que pode ser atribuída futuramente).
+
+✅ Funcionalidades:
+
+- Pesquisa por razão social, CNPJ, CEP ou categoria.
+- Edição dos dados de fornecedores.
+- Exclusão de fornecedores.
+- Criação de novos fornecedores com o botão "Criar Fornecedor".
+  
+![image](https://github.com/user-attachments/assets/28fc74db-e567-465f-85db-59d3b3915b01)
 
 ---
 
